@@ -11,24 +11,55 @@ async function lista_campos(){
                 fields = false
             }
             fields = resul
+            let temp = {}
             //console.log(fields)
-            fields = fields.map((i)=>{return `{ ${ i.Field}:${i.Type}}`})
-            console.log(fields)
+            //fields = fields.map((i)=>{return `{ ${ i.Field}:${i.Type}}`})
+            fields.map((i)=> {
+                let key = i.Field
+                let value = i.Type
+                temp[key] = value
+                //console.log(key, i.Type)
+            })
+            //console.log(temp)
+            fields = temp 
+            //console.log(fields)
           
         })
-    
 }
 
 module.exports = {
-    leer_tabla: (req, res)=>{
-        // agregar wheres en funcion de lo que se pida en el body 
-        db.execute(`SELECT * FROM ${tabla} `, (err, resul)=>{
+
+    leer_tabla: async (req, res)=>{
+        let filtros = "" 
+        let values = []
+        let datos
+        if(req.body.campos){
+            datos = req.body.campos
+            let temp = Object.keys(datos)  
+            filtros = "WHERE " 
+
+            await temp.forEach(element => {
+            
+                if(fields[element]){ 
+                    //
+                    //cambiar el igual en funcion de la busqueda a realizar
+                    //
+                    filtros += `${element}=? AND ` 
+                    values.push(datos[element]) 
+                }
+            })
+            filtros = filtros.slice(0, -4)
+
+        }
+        // agregar wheres en funcion de lo que se pida en el body
+        db.execute(`SELECT * FROM ${tabla} ${filtros}`,values, (err, resul)=>{
             if(err){
                 res.status(500).json({"error_en_db": err})
             }
             res.status(200).json({resul})
         })
     },
+
     campos_tabla: async (req, res)=>{
             if(!fields){
                 res.status(500).json({mensaje : `error al leer los campos en la tabla ${tabla}`})
@@ -36,40 +67,49 @@ module.exports = {
                 res.status(200).json({fields})
             }
     },
+
     crear_elemento: async (req, res)=>{
         let datos = req.body.campos
         let temp = []
         let query = ""
-        let values = []
-
+        let values = ""
 
         temp = Object.keys(datos)
-
         //console.log("temp "+ temp )
 
         await temp.forEach(element => {
-            console.log("elemento ", element)
-            if(fields.includes(element)){
-                console.log(datos[element])
+            //console.log("elemento ", element) 
+            if(fields[element]  && element != "id"){
+                //console.log("in ",datos[element])
                 query += ` ${element},`
-                if(fields.element[1] != "INT" || fields.element[1] != "DATE"){
-                    values += ` '${datos[element]}',`
+                // cambios para elementos que sean tipo int o date
+                if(fields[element].indexOf("int") != -1 || fields[element].indexOf("date") != -1){
+                    values += datos[element]
+                    values += ","
                 }else{
-                    values += ` ${datos[element]},`
+                    //console.log("no int no date")
+                    values += ` '${datos[element]}',`
                 }
             }
         })
         query = query.slice(0, -1)
         values = values.slice(0, -1)
             
-        console.log("query ", query)
-        console.log("values ",values)
+        // console.log("query ", query)
+        // console.log("values ",values)
         //console.log("fields ",fields)
-        res.json({mensaje:`INSERT INTO ${tabla} (${query}) VALUES (${values})`})
+        // res.json({mensaje:`INSERT INTO ${tabla} (${query}) VALUES (${values})`})
 
         //cambiar el prepared statement???
-        db.execute(`INSERT INTO ${tabla} (${query}) VALUES (${values})`)
+        db.execute(`INSERT INTO ${tabla} (${query}) VALUES (${values})`, (err, resul)=>{
+            if(err){
+                res.status(500).json({"mensaje de error en insert ":err})
+            }else{
+                res.status(200).json({mensaje:`elemento agregado`})
+            }
+        })
     },
+
     editar_elemento: (req, res)=>{
         res.send("editar elemento")
     },
@@ -120,3 +160,13 @@ module.exports = {
     //     // console.log("values ",values)
     //     // console.log("fields ",fields)
     //     res.json({mensaje:"ok"})
+
+
+    //-------------------------------------------------------------------------
+    //sort ordenar elementos para comprar
+    // temp = temp.sort( (a, b)=>{
+    //     a.toLowerCase() > b.toLowerCase() ? 1:
+    //     a.toLowerCase() < b.toLowerCase() ? -1:
+    //     0
+    // })
+    //-------------------------------------------------------------------------
