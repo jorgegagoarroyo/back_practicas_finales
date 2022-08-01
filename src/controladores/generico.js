@@ -17,7 +17,7 @@ async function lista_campos(){
             fields.map((i)=> {
                 let key = i.Field
                 let value = i.Type
-                temp[key] = value
+                temp[key] = value 
                 //console.log(key, i.Type)
             })
             //console.log(temp)
@@ -32,6 +32,7 @@ module.exports = {
     leer_tabla: async (req, res)=>{
         let filtros = "" 
         let values = []
+        let columnas = "*"
         let datos
         if(req.body.campos){
             datos = req.body.campos
@@ -39,20 +40,20 @@ module.exports = {
             filtros = "WHERE " 
 
             await temp.forEach(element => {
-            
                 if(fields[element]){ 
                     //
-                    //cambiar el igual en funcion de la busqueda a realizar
+                    //cambiar el igual(=) en funcion de la busqueda a realizar y el AND
                     //
                     filtros += `${element}=? AND ` 
                     values.push(datos[element]) 
                 }
             })
             filtros = filtros.slice(0, -4)
-
         }
+
+        
         // agregar wheres en funcion de lo que se pida en el body
-        db.execute(`SELECT * FROM ${tabla} ${filtros}`,values, (err, resul)=>{
+        db.execute(`SELECT ${columnas} FROM ${tabla} ${filtros}`,values, (err, resul)=>{
             if(err){
                 res.status(500).json({"error_en_db": err})
             }
@@ -110,11 +111,43 @@ module.exports = {
         })
     },
 
-    editar_elemento: (req, res)=>{
-        res.send("editar elemento")
+    editar_elemento: async (req, res)=>{
+        let datos = req.body.campos
+        let temp = []
+        let query = ""
+        let values = []
+        //id desde un middleware 
+        let id = req.query.id
+
+        temp = Object.keys(datos)
+
+        await temp.forEach(element => {
+            if(fields[element]  && element != "id"){
+                query += ` ${element} =?,`
+                values.push(datos[element])
+            }
+        })
+        query = query.slice(0, -1)
+        db.execute(`UPDATE ${tabla} SET ${query} WHERE ${id}`, values , (err, resul)=>{
+            if(err){
+                res.status(500).json({"mensaje de error en update ":err})
+            }else{
+                res.status(200).json({mensaje:`elemento editado`})
+            }
+        })
     },
     borrar_elemento: (req, res)=>{
-        res.send("borrar elemento")
+        let seleccion = req.body.campos
+        seleccion = seleccion.id
+        db.execute(`DELETE FROM ${tabla} WHERE id = ?`, seleccion, (err, resul)=>{
+            if(err){
+                return res.status(500).json({"error_en_delete: ": err})
+            }
+            return res.status(200).json({mensaje:"elemento eliminado"})
+
+            
+        })
+
     }
 } 
 
