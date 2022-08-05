@@ -128,9 +128,10 @@ editar_elemento: async (req, res)=>{
                 values.push(req.query.pass)  
             }
         })
+        values.push(id)
         query = query.slice(0, -1)
-        //console.log(`UPDATE ${tabla} SET ${query} WHERE ${id}`, values)
-        db.execute(`UPDATE ${tabla} SET ${query} WHERE ${id}`, values , (err, resul)=>{
+        console.log(`UPDATE ${tabla} SET ${query} WHERE id=?`, values)
+        db.execute(`UPDATE ${tabla} SET ${query} WHERE id=?`, values , (err, resul)=>{
             if(err){
                 res.status(500).json({"mensaje de error en update ":err})
             }else{
@@ -158,29 +159,38 @@ borrar_elemento: (req, res)=>{
 
 ingresar: async (req, res)=>{
     try{
-        let mail = req.body.campos.email
+        let email_user = req.body.campos.email
         let user
         let log_in = false 
-        await bd.execute(`SELECT * FROM ${tabla} WHERE email=?`, mail, (err, resul)=>{
-            if(err){
+        await db.execute(`SELECT *, roles.nombre AS rol  FROM ${tabla} LEFT JOIN roles ON id_rol = roles.id WHERE email=?`, [email_user], (err, resul)=>{
+            console.log("en db")
+            if(err){ 
                 throw err
             }
-            user = resul
-        })
-        await bcrypt.compare(req.body.campos.pass, user["pass"], (err, result)=>{
-            if(err){
-                throw err
-            }
-            if(result){
+            user = resul[0]
+            //console.log(user) 
+            //res.send("ok")
+            bcrypt.compare( req.body.campos.pass, user.pass,  (err, result)=>{
+                if(err){
+                    throw err
+                }
                 log_in = result
-            }
+                // console.log({"rol":user.rol,
+                //     "codigo":user.codigo,
+                //     "usuario":user.usuario})
+                // res.json({log_in})
+                let token = jwt.sign({
+                    "rol":user.rol,
+                    "codigo":user.codigo,
+                    "usuario":user.usuario
+                },
+                process.env.SECRETO)//agregar segundo token y expiracion
+                res.status(200).json({token})
+            })
         })
-        res.json({log_in})
-        //falta generar el token-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     }catch(err){
         res.status(500).json({mensaje:"error en ingreso de datos", err})
     }
-
 }
 } 
 

@@ -1,6 +1,6 @@
 const db = require("../database")
 
-const tabla = "alumnos"
+const tabla = "empleados"
 
 let fields = lista_campos()
 

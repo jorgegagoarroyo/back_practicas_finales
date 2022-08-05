@@ -11,6 +11,6 @@ router.put("/", clave, editar_elemento)
 
 router.delete("/", borrar_elemento)
 
-router.post("/ingresar",clave, ingresar)
+router.post("/ingresar", ingresar)
 
 module.exports = router
