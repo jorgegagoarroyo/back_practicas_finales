@@ -16,16 +16,3 @@ router.put("/", editar_elemento)
 router.delete("/", borrar_elemento)
 
 module.exports = router
-
-
-// router.get("/test", tokens, auth(["test"]), leer_tabla)
-
-// router.get("/:tabla", leer_tabla)
-
-// router.get("/:tabla/campos", campos_tabla)
-
-// router.post("/:tabla", crear_elemento)
-
-// router.put("/:tabla", editar_elemento)
-
-// router.delete("/:tabla", borrar_elemento)

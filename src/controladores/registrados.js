@@ -162,7 +162,7 @@ ingresar: async (req, res)=>{
         let email_user = req.body.campos.email
         let user
         let log_in = false 
-        await db.execute(`SELECT *, roles.nombre AS rol  FROM ${tabla} LEFT JOIN roles ON id_rol = roles.id WHERE email=?`, [email_user], (err, resul)=>{
+        await db.execute(`SELECT *, roles.nombre AS rol  FROM ${tabla} LEFT JOIN roles ON id_roles = roles.id WHERE email=?`, [email_user], (err, resul)=>{
             console.log("en db")
             if(err){ 
                 throw err
@@ -177,9 +177,9 @@ ingresar: async (req, res)=>{
                 log_in = result
                 // console.log({"rol":user.rol,
                 //     "codigo":user.codigo,
-                //     "usuario":user.usuario})
+                //     "usuario":user.usuario}) 
                 // res.json({log_in})
-                let token = jwt.sign({
+                let token = jwt.sign({ 
                     "rol":user.rol,
                     "codigo":user.codigo,
                     "usuario":user.usuario
