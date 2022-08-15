@@ -3,17 +3,17 @@ const tokens = require("../middleware/token")
 const auth = require("../middleware/auth")
 const { leer_tabla, crear_elemento, editar_elemento, borrar_elemento, campos_tabla, leer_tabla_todo } = require("../controladores/generico_joins")
 
-router.get("/", leer_tabla)
+router.get("/", tokens, auth(), leer_tabla)
 
-router.get("/todo", leer_tabla_todo)
+router.get("/todo", tokens, auth(), leer_tabla_todo)
 
-router.get("/campos", campos_tabla)
+router.get("/campos", tokens, auth(), campos_tabla)
 
-router.post("/", crear_elemento)
+router.post("/", tokens, auth(), crear_elemento)
 
-router.put("/", editar_elemento)
+router.put("/", tokens, auth(), editar_elemento)
 
-router.delete("/", borrar_elemento)
+router.delete("/", tokens, auth(), borrar_elemento)
 
 module.exports = router
 

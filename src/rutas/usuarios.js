@@ -1,18 +1,20 @@
 const express = require("express")
 const router = express.Router()
 const clave = require("../middleware/clave")
+const tokens = require("../middleware/token")
+const auth = require("../middleware/auth")
 const { leer_tabla, crear_elemento, editar_elemento, borrar_elemento, ingresar } = require("../controladores/registrados")
 
 const tutor = require("../middleware/tutor")
 const token = require("../middleware/token")
 
-router.get("/", leer_tabla)
+router.get("/", tokens, leer_tabla)
 
-router.post("/", clave, crear_elemento)
+router.post("/", tokens, auth(["secretaria"]), clave, crear_elemento)
 
-router.put("/", clave, editar_elemento)
+router.put("/",tokens, clave, editar_elemento)
 
-router.delete("/", borrar_elemento)
+router.delete("/", tokens, auth(), borrar_elemento)
 
 router.post("/ingresar", ingresar)
 

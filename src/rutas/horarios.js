@@ -2,18 +2,19 @@
 const router = require("express").Router()
 const tokens = require("../middleware/token")
 const auth = require("../middleware/auth")
+const prof_uf = require("../middleware/prof_uf")
 const { leer_tabla, crear_elemento, editar_elemento, borrar_elemento, campos_tabla, leer_tabla_todo } = require("../controladores/horarios")
 
-router.get("/", leer_tabla)
+router.get("/", tokens, auth(["secretaria"]), leer_tabla)
 
-router.get("/todo", leer_tabla_todo)
+router.get("/todo", tokens, auth(["secretaria", "profesor"]), leer_tabla_todo)
 
-router.get("/campos", campos_tabla)
+router.get("/campos", tokens, auth(["secretaria", "profesor"]), campos_tabla)
 
-router.post("/", crear_elemento)
+router.post("/", tokens, auth(["secretaria"]), crear_elemento)
 
-router.put("/", editar_elemento)
+router.put("/", tokens, auth(["secretaria", "profesor"]), prof_uf, editar_elemento)
 
-router.delete("/", borrar_elemento)
+router.delete("/", tokens, auth(["secretaria"]), borrar_elemento)
 
 module.exports = router

@@ -1,20 +1,23 @@
 const bd = require("../database")
 
-const es_tutor = async ( req, res, next)=>{
+const prof_uf = async ( req, res, next)=>{
     try {
         let act = req.query.token
         if( act.rol !="admin" || act.rol !="secretaria"){
             let value = req.body.campos
-            value = [value.empleado]
-            //console.log(value)
-            await  bd.execute("SELECT * FROM empleados WHERE id=?", value, (err, resul)=>{
+            value = [value.ufs]
+            await  bd.execute("SELECT * FROM horarios WHERE id_ufs=? ", value, (err, resul)=>{
                 if (err){
                     return res.status(500).json({mensaje:"error en tutor", err})
                 }
-                if(act.codigo == resul[0].codigo){
+                res = resul.filter(respon => respon.id_empleados == value.empleado )
+                //
+                console.log(res)
+                //
+                if(res){
                     next()
                 }
-                return res.status(400).json({mensaje:"no eres tutor"})
+                return res.status(400).json({mensaje:"no eres prefesor de esta uf"})
             })
         }
         next()
@@ -23,4 +26,4 @@ const es_tutor = async ( req, res, next)=>{
     }
 }
 
-module.exports = es_tutor
+module.exports = prof_uf
