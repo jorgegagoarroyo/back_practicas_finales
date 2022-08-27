@@ -158,18 +158,21 @@ borrar_elemento: (req, res)=>{
 },
 
 ingresar: async (req, res)=>{
+    console.log('ingresando')
     try{
         let email_user = req.body.campos.email
         let user
         let log_in = false 
+        let rol = ""
         await db.execute(`SELECT *, roles.nombre AS rol  FROM ${tabla} LEFT JOIN roles ON id_roles = roles.id WHERE email=?`, [email_user], (err, resul)=>{
             console.log("en db")
             if(err){ 
-                throw err
+                throw {basededatos: err}
             }
             user = resul[0]
-            //console.log(user) 
+            console.log(user) 
             //res.send("ok")
+            rol = user.rol
             bcrypt.compare( req.body.campos.pass, user.pass,  (err, result)=>{
                 if(err){
                     throw err
@@ -179,15 +182,15 @@ ingresar: async (req, res)=>{
                 //     "codigo":user.codigo,
                 //     "usuario":user.usuario}) 
                 // res.json({log_in})
-                let token = jwt.sign({ 
+                let token = jwt.sign({  
                     "rol":user.rol,
                     "codigo":user.codigo,
                     "usuario":user.usuario
                 },
                 process.env.SECRETO)//agregar segundo token y expiracion
-                res.status(200).json({token})
+                res.status(200).json({token, rol})
             })
-        })
+        }) 
     }catch(err){
         res.status(500).json({mensaje:"error en ingreso de datos", err})
     }

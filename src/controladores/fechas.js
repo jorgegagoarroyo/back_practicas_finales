@@ -85,7 +85,7 @@ module.exports = {
             })  
             filtros = filtros.slice(0, -4)
         }
-        console.log(otros_campos)
+        // console.log(otros_campos)
         db.execute(`SELECT * FROM ${tabla} ${filtros}`,values, (err, resul)=>{       
             if(err){
                 res.status(500).json({"error_en_db": err})
@@ -93,7 +93,7 @@ module.exports = {
                 res.status(200).json({resul})
             }
         })
-        }catch(err){
+        }catch(err){ 
             res.status(err).json({mensaje:"erroe en todo", err})
         }
     },

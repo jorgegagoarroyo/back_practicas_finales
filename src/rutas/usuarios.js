@@ -8,7 +8,7 @@ const { leer_tabla, crear_elemento, editar_elemento, borrar_elemento, ingresar }
 const tutor = require("../middleware/tutor")
 const token = require("../middleware/token")
 
-router.get("/", tokens, leer_tabla)
+router.post("/get", tokens, leer_tabla)
 
 router.post("/", tokens, auth(["secretaria"]), clave, crear_elemento)
 

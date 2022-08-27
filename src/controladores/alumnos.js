@@ -68,9 +68,11 @@ module.exports = {
 
     campos_tabla: async (req, res)=>{
         try {
+            // console.log(fields)
             if(!fields){
                 res.status(500).json({mensaje : `error al leer los campos en la tabla ${tabla}`})
             }else{
+                //console.log(fields)
                 res.status(200).json({fields})
             }
         } catch (err) {

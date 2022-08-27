@@ -1,5 +1,5 @@
 const db = require("../database")
-const tabla = "asistencias"
+const tabla = "asistencia"
 
 let fields 
 let otros_campos = ""
@@ -14,6 +14,7 @@ async function lista_campos(){
                 val = false
             }
             campos = resul
+            //console.log(campos)
             let temp = {}
             campos.map((i)=> {
                 let key = i.Field

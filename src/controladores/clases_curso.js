@@ -1,5 +1,5 @@
 const db = require("../database")
-const tabla = "clasescurso"
+const tabla = "clasescursos"
 
 let fields 
 let otros_campos = ""

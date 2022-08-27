@@ -14,9 +14,9 @@ app.use(morgan('tiny'))
 //middlwares
 app.use(cors())
 app.use(express.json())
-app.use(express.urlencoded({ extended: false}))
+app.use(express.urlencoded({ extended: true}))
 
-//rutas
+//rutas 
 app.use("/api", router)
 
 app.get("/", (req,res)=>{

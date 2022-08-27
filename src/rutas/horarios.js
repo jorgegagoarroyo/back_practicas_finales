@@ -5,7 +5,7 @@ const auth = require("../middleware/auth")
 const prof_uf = require("../middleware/prof_uf")
 const { leer_tabla, crear_elemento, editar_elemento, borrar_elemento, campos_tabla, leer_tabla_todo } = require("../controladores/horarios")
 
-router.get("/", tokens, auth(["secretaria"]), leer_tabla)
+router.post("/get", tokens, auth(["secretaria", "profesor"]), leer_tabla)
 
 router.get("/todo", tokens, auth(["secretaria", "profesor"]), leer_tabla_todo)
 
