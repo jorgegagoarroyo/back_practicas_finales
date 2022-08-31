@@ -216,7 +216,7 @@ module.exports = {
         db.execute(`DELETE FROM ${tabla} WHERE id = ?`, [seleccion], (err, resul)=>{
             if(err){
                 return res.status(500).json({"error_en_delete: ": err})
-            }
+            } 
             return res.status(200).json({mensaje:"elemento eliminado"})  
         })
         }catch(err){

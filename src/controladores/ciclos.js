@@ -79,7 +79,7 @@ module.exports = {
                     query += ` ${element},`
                     if(fields[element].indexOf("int") != -1 || fields[element].indexOf("date") != -1){
                         values += datos[element]
-                        values += ","
+                        values += "," 
                     }else{
                         values += ` '${datos[element]}',`
                     }

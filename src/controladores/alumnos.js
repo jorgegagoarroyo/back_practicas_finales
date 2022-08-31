@@ -49,7 +49,7 @@ module.exports = {
                         //cambiar el igual(=) en funcion de la busqueda a realizar y el AND
                         //
                         filtros += `${element}=? AND ` 
-                        values.push(datos[element]) 
+                        values.push(datos[element]+'') 
                     }
                 })
                 filtros = filtros.slice(0, -4)

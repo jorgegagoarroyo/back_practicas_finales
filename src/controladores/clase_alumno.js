@@ -66,6 +66,9 @@ async function lista_tablas(act = tabla){
 
 module.exports = {
     leer_tabla: async (req, res)=>{
+        console.log('----------------------------------')
+        console.log('tabla clase aulumnos')
+        console.log('----------------------------------')
         try{
             let filtros = "" 
         let values = []
