@@ -3,7 +3,7 @@ const bd = require("../database")
 const es_tutor = async ( req, res, next)=>{
     try {
         let act = req.query.token
-        if( act.rol !="admin" || act.rol !="secretaria"){
+        if( act.rol == "profesor"){
             let value = req.body.campos
             value = [value.profesor]
             //console.log(value)
