@@ -10,7 +10,7 @@ async function lista_campos(){
     try{
         let campos = await db.execute(`DESCRIBE ${tabla} `, (err, resul)=>{
             if(err){
-                console.log(`al leer los campos de la base de datos de la tabla ${tabla} ocurrio un error : `,err)
+                console.log(`al leer los campos de la base de datos de la tabla ${tabla} ocurrio un error horarios: `,err)
                 val = false
             }
             campos = resul
@@ -19,7 +19,7 @@ async function lista_campos(){
                 let key = i.Field
                 let value = i.Type
                 temp[key] = value 
-            })
+            }) 
             fields = temp 
             lista_tablas()
         })
@@ -33,7 +33,7 @@ async function lista_tablas(act = tabla){
         let temp = Object.keys(fields)
     let re = /id_/
     let otros = temp.filter( e => re.test(e))
-    temp.forEach( element =>{
+    temp.forEach( element =>{ 
         otros_campos += `${tabla}.${element}, `
     })
     if(otros){
@@ -43,7 +43,7 @@ async function lista_tablas(act = tabla){
             joins += ` RIGHT JOIN ${ele} ON ${tabla}.${e} = ${ele}.id`
             db.execute(`DESCRIBE ${ele} `, (err, resul)=>{
                 if(err){
-                    console.log(`al leer los campos de la base de datos de la tabla ${ele} ocurrio un error : `,err)
+                    console.log(`al leer los campos de la base de datos de la tabla ${ele} ocurrio un error: `,err)
                     val = false
                 }
                 campos = resul
@@ -176,7 +176,8 @@ module.exports = {
 
     editar_elemento: async (req, res)=>{
         try{
-            let datos = req.body.campos
+            console.log('editando horario')
+        let datos = req.body.campos
         let temp = []
         let query = ""
         let values = []

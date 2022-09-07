@@ -3,9 +3,9 @@ const tokens = require("../middleware/token")
 const auth = require("../middleware/auth")
 const { leer_tabla, crear_elemento, editar_elemento, borrar_elemento, campos_tabla } = require("../controladores/cursos")
 
-router.post("/get", tokens, auth(["secretaria"]), leer_tabla)
+router.post("/get", tokens, auth(["secretaria", "profesor"]), leer_tabla)
 
-router.get("/campos", tokens, auth(["secretaria"]), campos_tabla)
+router.get("/campos", tokens, auth(["secretaria", "profesor"]), campos_tabla)
 
 router.post("/", tokens, auth(["secretaria"]), crear_elemento)
 

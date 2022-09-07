@@ -19,6 +19,7 @@ async function lista_campos(){
                 temp[key] = value 
             })
             fields = temp  
+            console.log('campos aulas ok')
         })
     }catch(err){
         console.log(`error en lista_campos en tabla ${tabla}`)
@@ -56,7 +57,9 @@ module.exports = {
     },
 
     campos_tabla: async (req, res)=>{
+        console.log('campos 1')
         try {
+            console.log('campos')
             if(!fields){
                 res.status(500).json({mensaje : `error al leer los campos en la tabla ${tabla}`})
             }else{

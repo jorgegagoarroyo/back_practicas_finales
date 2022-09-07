@@ -15,6 +15,7 @@ val_token= async (req, res, next)=>{
         req.query.token = await jwt.verify( val, process.env.SECRETO)
         next()
     }catch(err){
+        console.log('error token')
         res.status(500).json({
             mensaje:"error en server token",
             err

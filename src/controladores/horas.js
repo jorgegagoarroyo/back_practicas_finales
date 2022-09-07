@@ -51,9 +51,10 @@ module.exports = {
                 return res.status(200).json({resul})
             })
         } catch (err) {
+            console.log(`error en tabla ${tabla} `, err)
             res.status(500).json({mensaje:`error en leer `, err})
         }
-    },
+    }, 
 
     campos_tabla: async (req, res)=>{
         try {
@@ -63,6 +64,7 @@ module.exports = {
                 res.status(200).json({fields})
             }
         } catch (err) {
+            console.log(`error en campos tabla ${tabla} `, err)
             res.status(500).json({mensaje:`error en campos`, err})
         }
     },

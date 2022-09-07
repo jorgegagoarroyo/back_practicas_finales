@@ -7,16 +7,20 @@ auth = (pasan = [])=>{
             let act = req.query.token
             //console.log(act)
             act = act.rol
-            //console.log(act)
+            // console.log(act)
+            // console.log(pasan)
+            // console.log(pasan.includes(act))
             //console.log(act == "admin")
             if( act == "admin" || pasan.includes(act)){
                 next()
             }else{
+                console.log('auth')
                 res.status(500).json({
                     mensaje:"error en rol no puedes pasar"
                 })
             }
         }catch(err){
+            console.log('error en auth')
             res.status(500).json({
                 mensaje:"error en rol",
                 err

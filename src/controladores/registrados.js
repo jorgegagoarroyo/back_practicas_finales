@@ -148,9 +148,11 @@ editar_elemento: async (req, res)=>{
 
 borrar_elemento: (req, res)=>{
     let seleccion = req.body.campos
-    seleccion = seleccion.id
+    seleccion = [seleccion.id+""]
+    // console.log(seleccion)
     db.execute(`DELETE FROM ${tabla} WHERE id = ?`, seleccion, (err, resul)=>{
         if(err){
+            console.log(err)
             return res.status(500).json({"error_en_delete: ": err})
         }
         return res.status(200).json({mensaje:"elemento eliminado"})      
@@ -158,9 +160,9 @@ borrar_elemento: (req, res)=>{
 },
 
 ingresar: async (req, res)=>{
-    console.log('ingresando')
+    console.log('ingresando') 
     try{
-        let email_user = req.body.campos.email
+        let email_user = req.body.campos.email  
         let user
         let log_in = false 
         let rol = ""
