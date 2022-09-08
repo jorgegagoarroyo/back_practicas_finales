@@ -162,8 +162,10 @@ module.exports = {
         })
         query = query.slice(0, -1)
         values = values.slice(0, -1)
+        // console.log(values)
         db.execute(`INSERT INTO ${tabla} (${query}) VALUES (${values})`, (err, resul)=>{
             if(err){
+                console.log('error insert fecha ', err)
                 res.status(500).json({"mensaje de error en insert ":err})
             }else{
                 res.status(200).json({mensaje:`elemento agregado`})
