@@ -14,7 +14,7 @@ router.get("/campos", tokens, auth(["secretaria", "profesor"]), campos_tabla)
 
 router.post("/", tokens, auth(["secretaria"]), clave, crear_elemento)
 
-router.put("/",tokens, clave, editar_elemento)
+router.put("/",tokens, clave, auth(["secretaria"]), editar_elemento)
 
 router.delete("/", tokens, auth(), borrar_elemento)
 
